@@ -67,12 +67,8 @@ class RecentsTableViewController: RootPoppableTableViewController {
     // ----------------------------
     override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         if let searchTerm = recentSearches?[indexPath.row] {
-            showPopularMentions(for: searchTerm)
+            performSegue(withIdentifier: SegueIdentifiers.fromRecentToPopularMentions, sender: searchTerm)
         }
-    }
-    
-    private func showPopularMentions(for searchTerm: String) {
-        
     }
     
     // MARK: - Delete Rows
@@ -111,9 +107,17 @@ class RecentsTableViewController: RootPoppableTableViewController {
         let destination = segue.destination
         
         if identifier == SegueIdentifiers.fromRecentToSearch {
-            if let tweetVC = destination as? TweetTableViewController {
+            if let tweetVC = destination.contents as? TweetTableViewController {
                 if let recentCell = sender as? UITableViewCell {
                     tweetVC.searchText = recentCell.textLabel?.text
+                }
+            }
+        }
+        
+        if identifier == SegueIdentifiers.fromRecentToPopularMentions {
+            if let popularMVC = destination.contents as? PopularMentionsTableViewController {
+                if let searchTerm = sender as? String {
+                    popularMVC.searchTerm = searchTerm
                 }
             }
         }

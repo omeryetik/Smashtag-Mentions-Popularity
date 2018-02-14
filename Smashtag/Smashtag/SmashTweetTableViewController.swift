@@ -57,7 +57,7 @@ class SmashTweetTableViewController: TweetTableViewController {
                     for item in matches {
                         print("==================================================")
                         print("identifier :: \((item.unique!))")
-                        print("popularity :: \(item.popoularity)")
+                        print("popularity :: \(item.popularity)")
                         print("keyword :: \((item.text)!)")
                         print("searchText :: \((item.searchText)!)")
                         print("type :: \((item.type)!)")

@@ -47,6 +47,7 @@ struct SegueIdentifiers {
     static let fromTweetsToImageCollection = "Segue.show.image.collection.from.tweets"
     static let fromImageCollectionToTweets = "Segue.show.tweet.from.collection.to.tweets"
     static let fromRecentToPopularMentions = "Segue.show.popular.mentions.from.recents"
+    static let fromPopularMentionToTweets = "Segue.from.popular.mention.to.tweets"
 }
 
 struct CellIdentifiers {
@@ -55,6 +56,7 @@ struct CellIdentifiers {
     static let forTweets = "Cell.tweet"
     static let forRecents = "Cell.recent"
     static let forImagesInTweetCollection = "Cell.tweet.collection.image"
+    static let forPopularMentions = "Cell.ppopular.mention"
 }
 
 struct UniqueTweetImage {

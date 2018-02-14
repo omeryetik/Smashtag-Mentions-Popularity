@@ -35,7 +35,7 @@ class Tweet: NSManagedObject {
             let mentionInfo = MentionInfo(type: MentionTypes.hashtag, keyword: hashtag.keyword, identifier: identifier, searchText: query)
             let hashtag = try? Mention.findCreateMention(matching: mentionInfo, in: context)
             hashtag?.addToUniqueMentioners(tweet)
-            hashtag?.popoularity = Int32(hashtag?.uniqueMentioners?.count ?? 0)
+            hashtag?.popularity = Int32(hashtag?.uniqueMentioners?.count ?? 0)
         }
         
         for userMention in twitterInfo.userMentions {
@@ -44,7 +44,7 @@ class Tweet: NSManagedObject {
             let mentionInfo = MentionInfo(type: MentionTypes.userMention, keyword: userMention.keyword, identifier: identifier, searchText: query)
             let userMention = try? Mention.findCreateMention(matching: mentionInfo, in: context)
             userMention?.addToUniqueMentioners(tweet)
-            userMention?.popoularity = Int32(userMention?.uniqueMentioners?.count ?? 0)
+            userMention?.popularity = Int32(userMention?.uniqueMentioners?.count ?? 0)
         }
         
         return tweet
