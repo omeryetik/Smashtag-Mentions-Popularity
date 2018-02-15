@@ -25,7 +25,7 @@ class Tweet: NSManagedObject {
         } catch {
             throw error
         }
-        
+
         return createNewTweet(matching: twitterInfo, forSearch: query, in: context)
     }
     

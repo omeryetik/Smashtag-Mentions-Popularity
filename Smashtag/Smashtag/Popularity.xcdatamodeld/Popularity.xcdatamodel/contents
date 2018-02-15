@@ -6,14 +6,23 @@
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="unique" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="searchTerm" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SearchTerm" inverseName="mentions" inverseEntity="SearchTerm" syncable="YES"/>
         <relationship name="uniqueMentioners" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tweet" inverseName="mentions" inverseEntity="Tweet" syncable="YES"/>
+    </entity>
+    <entity name="SearchTerm" representedClassName=".SearchTerm" syncable="YES" codeGenerationType="category">
+        <attribute name="created" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="mentions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Mention" inverseName="searchTerm" inverseEntity="Mention" syncable="YES"/>
+        <relationship name="tweets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tweet" inverseName="searchTerms" inverseEntity="Tweet" syncable="YES"/>
     </entity>
     <entity name="Tweet" representedClassName=".Tweet" syncable="YES" codeGenerationType="category">
         <attribute name="unique" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="mentions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Mention" inverseName="uniqueMentioners" inverseEntity="Mention" syncable="YES"/>
+        <relationship name="searchTerms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SearchTerm" inverseName="tweets" inverseEntity="SearchTerm" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Mention" positionX="-1685" positionY="524" width="128" height="133"/>
-        <element name="Tweet" positionX="-2187" positionY="584" width="128" height="73"/>
+        <element name="Mention" positionX="-1350" positionY="567" width="128" height="148"/>
+        <element name="Tweet" positionX="-1919" positionY="641" width="128" height="88"/>
+        <element name="SearchTerm" positionX="-1620" positionY="860" width="128" height="103"/>
     </elements>
 </model>
