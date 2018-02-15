@@ -37,7 +37,7 @@ class TweetTableViewController: RootPoppableTableViewController, UITextFieldDele
     
     private func twitterRequest() -> Twitter.Request? {
         if let query = searchText, !query.isEmpty {
-            return Twitter.Request(search: "\(query) -filter:unsafe -filter:retweets", count: 50)
+            return Twitter.Request(search: "\(query) -filter:unsafe -filter:retweets", count: 5)
         }
         return nil
     }

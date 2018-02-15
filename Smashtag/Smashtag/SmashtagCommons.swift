@@ -13,8 +13,10 @@ import Twitter
 struct MentionInfo {
     let type: String
     let keyword: String
-    let identifier: String
     let searchText: String
+    var identifier: String {
+        return "\(searchText).\(keyword)"
+    }
 }
 
 struct MentionTypes {

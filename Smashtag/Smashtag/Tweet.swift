@@ -26,27 +26,64 @@ class Tweet: NSManagedObject {
             throw error
         }
         
+        return createNewTweet(matching: twitterInfo, forSearch: query, in: context)
+    }
+    
+    class func createNewTweet(matching twitterInfo: Twitter.Tweet, forSearch query: String, in context: NSManagedObjectContext) -> Tweet {
+        
         let tweet = Tweet(context: context)
         tweet.unique = twitterInfo.identifier
         
-        for hashtag in twitterInfo.hashtags {
-            // add each item as a mention
-            let identifier = "\(query).\(hashtag.keyword)"
-            let mentionInfo = MentionInfo(type: MentionTypes.hashtag, keyword: hashtag.keyword, identifier: identifier, searchText: query)
-            let hashtag = try? Mention.findCreateMention(matching: mentionInfo, in: context)
-            hashtag?.addToUniqueMentioners(tweet)
-            hashtag?.popularity = Int32(hashtag?.uniqueMentioners?.count ?? 0)
+        let hashtagInfo = twitterInfo.hashtags.map { (mention) -> MentionInfo in
+            return MentionInfo(type: MentionTypes.hashtag, keyword: mention.keyword, searchText: query)
         }
         
-        for userMention in twitterInfo.userMentions {
-            // add each item as a mention
-            let identifier = "\(query).\(userMention.keyword)"
-            let mentionInfo = MentionInfo(type: MentionTypes.userMention, keyword: userMention.keyword, identifier: identifier, searchText: query)
-            let userMention = try? Mention.findCreateMention(matching: mentionInfo, in: context)
-            userMention?.addToUniqueMentioners(tweet)
-            userMention?.popularity = Int32(userMention?.uniqueMentioners?.count ?? 0)
+        let userInfo = twitterInfo.userMentions.map { (mention) -> MentionInfo in
+            return MentionInfo(type: MentionTypes.userMention, keyword: mention.keyword, searchText: query)
         }
+        
+        let hashtags = try? Mention.batchCreateMentions(matching: hashtagInfo, in: context)
+        let userMentions = try? Mention.batchCreateMentions(matching: userInfo, in: context)
+        
+        hashtags?.forEach({ (mention) in
+            mention.addToUniqueMentioners(tweet)
+            mention.popularity = Int32(mention.uniqueMentioners?.count ?? 0)
+        })
+        
+        userMentions?.forEach({ (mention) in
+            mention.addToUniqueMentioners(tweet)
+            mention.popularity = Int32(mention.uniqueMentioners?.count ?? 0)
+        })
         
         return tweet
+    }
+    
+    class func batchCreateTweets(matching infoArray: [Twitter.Tweet], forSearch query: String, in context: NSManagedObjectContext) throws -> [Tweet] {
+        
+        let identifiersToAdd = infoArray.map { $0.identifier }
+        var identifiersNotInDatabase = ArraySlice<String>()
+        
+        var tweetsInDatabase = Array<Tweet>()
+        var tweetsNotInDatabase = Array<Tweet>()
+        
+        let request: NSFetchRequest<Tweet> = Tweet.fetchRequest()
+        request.predicate = NSPredicate(format: "unique IN %@", identifiersToAdd)
+        
+        do {
+            let matches = try context.fetch(request)
+            let identifiersInDatabase = matches.map { $0.unique }
+            identifiersNotInDatabase = identifiersToAdd.drop(while: { (identifier) -> Bool in
+                identifiersInDatabase.contains(where: { $0 == identifier } )
+            })
+            tweetsInDatabase = matches
+        } catch {
+            throw error
+        }
+        
+        for index in identifiersNotInDatabase.indices {
+            tweetsNotInDatabase.append(createNewTweet(matching: infoArray[index], forSearch: query, in: context))
+        }
+        
+        return tweetsNotInDatabase + tweetsInDatabase
     }
 }
