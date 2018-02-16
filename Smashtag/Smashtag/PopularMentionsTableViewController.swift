@@ -29,9 +29,14 @@ class PopularMentionsTableViewController: FetchedResultsTableViewController {
     private func updateUI() {
         if let context = container?.viewContext {
             context.perform { [weak self] in
+                // Fetch mentions with the chosen searchText
                 let request: NSFetchRequest<Mention> = Mention.fetchRequest()
                 request.predicate = NSPredicate(format: "searchText ==[c] %@", (self?.searchTerm)!)
                 
+                // 3-level sorting
+                // - 1. According to type (hashtag or user) - Will corrspond to tableView sections
+                // - 2. According to popularity count
+                // - 3. If popularity counts are equal, sort alphabetically
                 let sortA = NSSortDescriptor(key: "type", ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare(_:)))
                 let sortB = NSSortDescriptor(key: "popularity", ascending: false)
                 let sortC = NSSortDescriptor(key: "text", ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare(_:)))
@@ -60,6 +65,8 @@ class PopularMentionsTableViewController: FetchedResultsTableViewController {
         return cell
     }
     
+    // If any of the mentions are selected, segue to initial tweets table view controller
+    // to show a list of 100 recent tweets corresponding to selected mention
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let mention = fetchedResultsController?.object(at: indexPath) {
             performSegue(withIdentifier: SegueIdentifiers.fromPopularMentionToTweets, sender: mention)

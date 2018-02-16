@@ -78,8 +78,26 @@ class RecentsTableViewController: RootPoppableTableViewController {
     @IBAction func startEditing(_ sender: UIBarButtonItem) {
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.allowsSelectionDuringEditing = false
-        tableView.setEditing(true, animated: true)
+        if tableView.isEditing {
+            isDeletingARow = false
+            tableView.setEditing(false, animated: true)
+            setEditButtonTitle(to: "Edit")
+        } else {
+            tableView.setEditing(true, animated: true)
+            setEditButtonTitle(to: "Done")
+        }
     }
+    
+    private func setEditButtonTitle(to newTitle: String) {
+        if var rightBarButtonItems = navigationItem.rightBarButtonItems {
+            let editButton = rightBarButtonItems[0]
+            editButton.title = newTitle
+            rightBarButtonItems[0] = editButton
+            navigationItem.rightBarButtonItems = rightBarButtonItems
+        }
+
+    }
+    
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.

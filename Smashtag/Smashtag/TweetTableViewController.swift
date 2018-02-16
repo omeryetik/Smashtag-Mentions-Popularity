@@ -37,7 +37,7 @@ class TweetTableViewController: RootPoppableTableViewController, UITextFieldDele
     
     private func twitterRequest() -> Twitter.Request? {
         if let query = searchText, !query.isEmpty {
-            return Twitter.Request(search: "\(query) -filter:unsafe -filter:retweets", count: 5)
+            return Twitter.Request(search: "\(query) -filter:unsafe -filter:retweets", count: 100)
         }
         return nil
     }
@@ -75,6 +75,11 @@ class TweetTableViewController: RootPoppableTableViewController, UITextFieldDele
                 // Add the term now - either it existed before or never - and it will
                 // be on top of the list
                 recentSearches.insert(searchText, at: 0)
+                // If number of saved recent searches exceeds 100, drop older items
+                while recentSearches.count > 100 {
+                    recentSearches = Array(recentSearches.dropLast())
+                }
+                // Save final recentSearches array to UserDefaults
                 UserDefaults.standard.set(recentSearches, forKey: Keys.keyForRecentsArray)
 
             } else {

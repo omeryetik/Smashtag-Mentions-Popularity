@@ -15,7 +15,7 @@ struct MentionInfo {
     let keyword: String
     let searchText: String
     var identifier: String {
-        return "\(searchText).\(keyword)"
+        return "\(searchText).\(keyword)".lowercased()
     }
 }
 
@@ -78,3 +78,4 @@ extension UIViewController {
         }
     }
 }
+

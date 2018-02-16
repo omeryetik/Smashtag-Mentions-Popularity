@@ -14,7 +14,7 @@
         <scene sceneID="RQF-2p-enX">
             <objects>
                 <collectionViewController id="PXz-RO-RCP" customClass="TweetImagesCollectionViewController" customModule="Smashtag" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="a58-Z4-Hhj">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="a58-Z4-Hhj">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -208,7 +208,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Recent Searches" id="edo-0z-u4Q">
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="d4g-Rg-hCa">
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="d4g-Rg-hCa">
                             <connections>
                                 <action selector="startEditing:" destination="aWl-1C-MIH" id="Acs-PZ-WDX"/>
                             </connections>
